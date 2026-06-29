@@ -62,7 +62,6 @@ public class BolaoCopa {
                     } while (opcao != 0);
                     
                 } 
-                // FLUXO DO PARTICIPANTE
                 else if (user instanceof UsuarioParticipante) {
                     UsuarioParticipante participante = (UsuarioParticipante) user;
                     do {
@@ -87,42 +86,43 @@ public class BolaoCopa {
                 // Se o login retornar null, significa que o usuário escolheu sair do programa (digitou 0)
                 break;
             }
-        } while (user == null); // Permite voltar para a tela de login caso faça logout
+        } while (user == null || is_login); // Permite voltar para a tela de login caso faça logout
     }
     
     public static Usuario login(Bolao bolao) {
         String nomeUsuario, senhaUsuario;
         UsuarioAdmin admin = new UsuarioAdmin();
         
-        System.out.println("==================");
-        System.out.println("|      LOGIN     |");
-        System.out.println("==================");
-        System.out.print("Digite o nome de usuário (0 para fechar o programa): ");
-        nomeUsuario = sc.nextLine();
-        
-        if (nomeUsuario.trim().equals("") || nomeUsuario.equals("0"))
-            return null;
-        
-        System.out.print("Digite sua senha: ");
-        senhaUsuario = sc.nextLine();
-        
-        if (nomeUsuario.equals(nomeAdmin) && senhaUsuario.equals(senhaAdmin)) {
-            System.out.println("\n[SISTEMA] Bem-vindo, Administrador!");
-            return admin;
-        }
-        
-        if (bolao.isRankingVazio()) {
-            System.out.println("Nenhum participante cadastrado ainda. Entre como admin para cadastrar.");
-            return null;
-        }
-        
-        UsuarioParticipante part = bolao.getParticipante(nomeUsuario, senhaUsuario);
-        if (part != null) {
-            System.out.println("\n[SISTEMA] Bem-vindo, " + part.getNome() + "!");
-            return part;
-        } else {
-            System.out.println("Usuário ou senha incorretos.");
-            return null;
+        while (true){
+            System.out.println("==================");
+            System.out.println("|      LOGIN     |");
+            System.out.println("==================");
+            System.out.print("Digite o nome de usuário (0 para fechar o programa): ");
+            nomeUsuario = sc.nextLine();
+
+            if (nomeUsuario.trim().equals("") || nomeUsuario.equals("0"))
+                return null;
+
+            System.out.print("Digite sua senha: ");
+            senhaUsuario = sc.nextLine();
+
+            if (nomeUsuario.equals(nomeAdmin) && senhaUsuario.equals(senhaAdmin)) {
+                System.out.println("\n[SISTEMA] Bem-vindo, Administrador!");
+                return admin;
+            }
+
+            if (bolao.isRankingVazio()) {
+                System.out.println("Nenhum participante cadastrado ainda. Entre como admin para cadastrar.");
+                continue;
+            }
+
+            UsuarioParticipante part = bolao.getParticipante(nomeUsuario, senhaUsuario);
+            if (part != null) {
+                System.out.println("\n[SISTEMA] Bem-vindo, " + part.getNome() + "!");
+                return part;
+            } else {
+                System.out.println("Usuário ou senha incorretos.");
+            }
         }
     }
     
@@ -232,8 +232,6 @@ public class BolaoCopa {
             sc.nextLine(); // Limpa o buffer
             
             jogador = bolao.getPartida(numPartida).getMandante().getJogador(numJogador);
-            if (i > 0 && jogMan.get(i - 1).equals(jogador))
-                continue;
             
             jogMan.add(jogador);
             totalJogadoresMan++;
@@ -248,8 +246,6 @@ public class BolaoCopa {
             sc.nextLine(); // Limpa o buffer
             
             jogador = bolao.getPartida(numPartida).getVisitante().getJogador(numJogador);
-            if (i > 0 && jogVis.get(i - 1).equals(jogador))
-                continue;
             
             jogVis.add(jogador);
             totalJogadoresVis++;
@@ -269,12 +265,19 @@ public class BolaoCopa {
         ArrayList<Jogador> jogMan = new ArrayList<>();
         ArrayList<Jogador> jogVis = new ArrayList<>();
         Jogador jogador;
+        String resultado;
         
         System.out.println("Escolha a partida: ");
         bolao.mostrarPartidas();
         numPartida = sc.nextInt();
         sc.nextLine(); // Limpa o buffer
         numPartida--;
+        
+        System.out.printf("Palpite o resultado (%s/Empate/%s): ", 
+                bolao.getPartida(numPartida).getMandante().getNome(),
+                bolao.getPartida(numPartida).getVisitante().getNome());
+        
+        resultado = sc.nextLine();
         
         System.out.print("Digite os gols do mandante: ");
         numGolsMan = sc.nextInt();
@@ -291,8 +294,6 @@ public class BolaoCopa {
             sc.nextLine(); // Limpa o buffer
             
             jogador = bolao.getPartida(numPartida).getMandante().getJogador(numJogador);
-            if (i > 0 && jogMan.get(i - 1).equals(jogador))
-                continue;
             
             jogMan.add(jogador);
             totalJogadoresMan++;
@@ -307,9 +308,6 @@ public class BolaoCopa {
             sc.nextLine(); // Limpa o buffer
             
             jogador = bolao.getPartida(numPartida).getVisitante().getJogador(numJogador);
-            if (i > 0 && jogVis.get(i - 1).equals(jogador))
-                continue;
-            
             jogVis.add(jogador);
             totalJogadoresVis++;
         }
