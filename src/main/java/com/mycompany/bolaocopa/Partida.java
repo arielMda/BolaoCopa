@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.bolaocopa;
+package com.mycompany.bolaocopa; 
 
 /**
  *
@@ -95,16 +95,21 @@ public class Partida {
         for (int i = 0; i < this.marcadoresMan.size(); i++){
             if (palpite.marcadoresMan.contains(this.marcadoresMan.get(i))){
                 int index = palpite.marcadoresMan.indexOf(this.marcadoresMan.get(i));
-                Pontuacoes pontos = Pontuacoes.ACERTOJOGADOR;
-                somaPontos += pontos.getPontos() * getModificador(palpite.marcadoresMan.get(index).getPosicao());
+                if (palpite.marcadoresMan.get(index) != null){
+                    Pontuacoes pontos = Pontuacoes.ACERTOJOGADOR;
+                    somaPontos += pontos.getPontos() * getModificador(palpite.marcadoresMan.get(index).getPosicao());
+                }
             }
         }
         
         for (int i = 0; i < this.marcadoresVis.size(); i++){
             if (palpite.marcadoresVis.contains(this.marcadoresVis.get(i))){
                 int index = palpite.marcadoresVis.indexOf(this.marcadoresVis.get(i));
-                Pontuacoes pontos = Pontuacoes.ACERTOJOGADOR;
-                somaPontos += pontos.getPontos() * getModificador(palpite.marcadoresVis.get(index).getPosicao());
+                
+                if (palpite.marcadoresVis.get(index) != null){
+                    Pontuacoes pontos = Pontuacoes.ACERTOJOGADOR;
+                    somaPontos += pontos.getPontos() * getModificador(palpite.marcadoresVis.get(index).getPosicao());
+                }
             }
         }
         return somaPontos;
