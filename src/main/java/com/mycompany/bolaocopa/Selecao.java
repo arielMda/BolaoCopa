@@ -60,6 +60,7 @@ public class Selecao implements Serializable{
         }
         
         for (int i = 0; i < this.numJogadores; i++){
+            System.out.printf("%d- ", i + 1);
             jogadores[i].mostrarInfo();
         }
     }
